@@ -9,6 +9,6 @@ services:
     image: ghcr.io/bmccord/maplarge/web:${WEB_IMAGE_TAG:-latest}
     restart: unless-stopped
     ports:
-      - "${WEB_PORT:-3100}:80"
+      - "${WEB_PORT:-3200}:80"
     depends_on:
       - api
