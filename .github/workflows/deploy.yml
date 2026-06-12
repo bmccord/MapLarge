@@ -1,0 +1,183 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      skip_dev:
+        description: 'Skip dev deployment'
+        type: boolean
+        default: false
+      major_api:
+        description: 'Major version bump for API'
+        type: boolean
+        default: false
+      major_web:
+        description: 'Major version bump for Web'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  packages: write
+
+concurrency:
+  group: deploy-main
+  cancel-in-progress: false
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  # ── Detect what changed ──────────────────────────────────────────────
+  changes:
+    name: Detect Changes
+    runs-on: self-hosted
+    outputs:
+      api: ${{ steps.filter.outputs.api }}
+      web: ${{ steps.filter.outputs.web }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Check changed paths
+        id: filter
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "api=true" >> "$GITHUB_OUTPUT"
+            echo "web=true" >> "$GITHUB_OUTPUT"
+          else
+            PREV=${{ github.event.before }}
+            API=$(git diff --name-only $PREV HEAD -- 'MapLargeBrowser.Api/' | head -1)
+            WEB=$(git diff --name-only $PREV HEAD -- 'MapLargeBrowser.Web/' | head -1)
+            echo "api=$( [ -n "$API" ] && echo true || echo false )" >> "$GITHUB_OUTPUT"
+            echo "web=$( [ -n "$WEB" ] && echo true || echo false )" >> "$GITHUB_OUTPUT"
+          fi
+
+  # ── Version tags ─────────────────────────────────────────────────────
+  version:
+    name: Compute Versions
+    needs: changes
+    runs-on: self-hosted
+    outputs:
+      api_version: ${{ steps.ver.outputs.api_version }}
+      web_version: ${{ steps.ver.outputs.web_version }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Compute service versions
+        id: ver
+        run: |
+          compute_version() {
+            local prefix="$1"
+            local is_major="$2"
+            local latest=$(git tag -l "${prefix}/v*" --sort=-v:refname | head -1)
+            if [ -z "$latest" ]; then
+              echo "${prefix}/v1.0.0"
+              return
+            fi
+            local ver=${latest#${prefix}/v}
+            IFS='.' read -r major minor patch <<< "$ver"
+            local commit_msg="${{ github.event.head_commit.message }}"
+            if [ "$is_major" = "true" ] || echo "$commit_msg" | grep -qE "\[(major|breaking):${prefix#*/}\]|\[(major|breaking)\]"; then
+              echo "${prefix}/v$((major + 1)).0.0"
+            else
+              echo "${prefix}/v${major}.$((minor + 1)).0"
+            fi
+          }
+
+          if [ "${{ needs.changes.outputs.api }}" = "true" ]; then
+            API_VER=$(compute_version "api" "${{ inputs.major_api }}")
+            echo "api_version=${API_VER#api/v}" >> "$GITHUB_OUTPUT"
+            git tag "$API_VER"
+          fi
+
+          if [ "${{ needs.changes.outputs.web }}" = "true" ]; then
+            WEB_VER=$(compute_version "web" "${{ inputs.major_web }}")
+            echo "web_version=${WEB_VER#web/v}" >> "$GITHUB_OUTPUT"
+            git tag "$WEB_VER"
+          fi
+
+          git push --tags || true
+
+  # ── Build API ────────────────────────────────────────────────────────
+  build-api:
+    name: Build API Image
+    needs: [changes, version]
+    if: needs.changes.outputs.api == 'true'
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
+
+      - name: Build and push
+        run: |
+          IMAGE=${{ env.REGISTRY }}/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')/api
+          VERSION=${{ needs.version.outputs.api_version }}
+          docker build -t $IMAGE:$VERSION -t $IMAGE:latest MapLargeBrowser.Api/
+          docker push $IMAGE:$VERSION
+          docker push $IMAGE:latest
+
+  # ── Build Web ────────────────────────────────────────────────────────
+  build-web:
+    name: Build Web Image
+    needs: [changes, version]
+    if: needs.changes.outputs.web == 'true'
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
+
+      - name: Build and push
+        run: |
+          IMAGE=${{ env.REGISTRY }}/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')/web
+          VERSION=${{ needs.version.outputs.web_version }}
+          docker build -t $IMAGE:$VERSION -t $IMAGE:latest MapLargeBrowser.Web/
+          docker push $IMAGE:$VERSION
+          docker push $IMAGE:latest
+
+  # ── Deploy Dev ───────────────────────────────────────────────────────
+  deploy-dev:
+    name: Deploy to Dev
+    needs: [changes, version, build-api, build-web]
+    if: always() && !inputs.skip_dev && (needs.build-api.result == 'success' || needs.build-api.result == 'skipped') && (needs.build-web.result == 'success' || needs.build-web.result == 'skipped')
+    runs-on: self-hosted
+    environment: dev
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_DEPLOY_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ vars.DEPLOY_HOST }} >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Deploy
+        run: |
+          SSH="ssh -i ~/.ssh/deploy_key ${{ vars.DEPLOY_USER }}@${{ vars.DEPLOY_HOST }}"
+          SCP="scp -i ~/.ssh/deploy_key"
+          DEPLOY_DIR="${{ vars.DEPLOY_PATH }}"
+
+          $SSH "mkdir -p $DEPLOY_DIR"
+          $SCP .github/deploy/docker-compose.yml ${{ vars.DEPLOY_USER }}@${{ vars.DEPLOY_HOST }}:$DEPLOY_DIR/docker-compose.yml
+
+          $SSH "cat > $DEPLOY_DIR/.env" << ENVEOF
+          API_IMAGE_TAG=${{ needs.version.outputs.api_version || 'latest' }}
+          WEB_IMAGE_TAG=${{ needs.version.outputs.web_version || 'latest' }}
+          ENVEOF
+
+          $SSH "cd $DEPLOY_DIR && docker compose pull && docker compose up -d --remove-orphans"
+          $SSH "docker image prune -a --filter 'until=168h' -f" || true
+
+      - name: Clean up SSH
+        if: always()
+        run: rm -f ~/.ssh/deploy_key

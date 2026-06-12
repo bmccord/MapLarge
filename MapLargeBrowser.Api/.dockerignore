@@ -1,0 +1,6 @@
+bin
+obj
+SampleRoot
+.vs
+.idea
+*.user

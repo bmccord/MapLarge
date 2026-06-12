@@ -1,0 +1,14 @@
+services:
+  api:
+    image: ghcr.io/bmccord/maplarge/api:${API_IMAGE_TAG:-latest}
+    restart: unless-stopped
+    expose:
+      - "8080"
+
+  web:
+    image: ghcr.io/bmccord/maplarge/web:${WEB_IMAGE_TAG:-latest}
+    restart: unless-stopped
+    ports:
+      - "${WEB_PORT:-3100}:80"
+    depends_on:
+      - api
