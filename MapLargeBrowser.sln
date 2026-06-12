@@ -1,0 +1,56 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapLargeBrowser.Api", "MapLargeBrowser.Api\MapLargeBrowser.Api.csproj", "{26BAD95D-D6D3-4F1C-BFCD-78197D4CDEED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MapLargeBrowser.Web", "MapLargeBrowser.Web", "{5E33F332-5A56-4D24-A496-4CBB4B5F5F7B}"
+	ProjectSection(SolutionItems) = preProject
+		MapLargeBrowser.Web\index.html = MapLargeBrowser.Web\index.html
+		MapLargeBrowser.Web\package.json = MapLargeBrowser.Web\package.json
+		MapLargeBrowser.Web\tsconfig.json = MapLargeBrowser.Web\tsconfig.json
+		MapLargeBrowser.Web\vite.config.ts = MapLargeBrowser.Web\vite.config.ts
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3D5A434C-B61F-4201-8451-4F0B0585E259}"
+	ProjectSection(SolutionItems) = preProject
+		MapLargeBrowser.Web\src\api.ts = MapLargeBrowser.Web\src\api.ts
+		MapLargeBrowser.Web\src\app.css = MapLargeBrowser.Web\src\app.css
+		MapLargeBrowser.Web\src\config.ts = MapLargeBrowser.Web\src\config.ts
+		MapLargeBrowser.Web\src\main.ts = MapLargeBrowser.Web\src\main.ts
+		MapLargeBrowser.Web\src\modal.ts = MapLargeBrowser.Web\src\modal.ts
+		MapLargeBrowser.Web\src\router.ts = MapLargeBrowser.Web\src\router.ts
+		MapLargeBrowser.Web\src\types.ts = MapLargeBrowser.Web\src\types.ts
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{26BAD95D-D6D3-4F1C-BFCD-78197D4CDEED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26BAD95D-D6D3-4F1C-BFCD-78197D4CDEED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26BAD95D-D6D3-4F1C-BFCD-78197D4CDEED}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{26BAD95D-D6D3-4F1C-BFCD-78197D4CDEED}.Debug|x64.Build.0 = Debug|Any CPU
+		{26BAD95D-D6D3-4F1C-BFCD-78197D4CDEED}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{26BAD95D-D6D3-4F1C-BFCD-78197D4CDEED}.Debug|x86.Build.0 = Debug|Any CPU
+		{26BAD95D-D6D3-4F1C-BFCD-78197D4CDEED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26BAD95D-D6D3-4F1C-BFCD-78197D4CDEED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26BAD95D-D6D3-4F1C-BFCD-78197D4CDEED}.Release|x64.ActiveCfg = Release|Any CPU
+		{26BAD95D-D6D3-4F1C-BFCD-78197D4CDEED}.Release|x64.Build.0 = Release|Any CPU
+		{26BAD95D-D6D3-4F1C-BFCD-78197D4CDEED}.Release|x86.ActiveCfg = Release|Any CPU
+		{26BAD95D-D6D3-4F1C-BFCD-78197D4CDEED}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3D5A434C-B61F-4201-8451-4F0B0585E259} = {5E33F332-5A56-4D24-A496-4CBB4B5F5F7B}
+	EndGlobalSection
+EndGlobal

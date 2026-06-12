@@ -1,0 +1,38 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.userprefs
+.vs/
+
+# Rider
+.idea/
+*.sln.iml
+*.DotSettings.user
+
+# Node / TypeScript
+node_modules/
+*.tsbuildinfo
+MapLargeBrowser.Web/public/js/
+MapLargeBrowser.Web/dist/
+
+# Claude Code
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Local env
+.env
+.env.local
+
+# Sample files are seeded by SampleSeeder at startup, not committed
+MapLargeBrowser.Api/SampleRoot/
+
+# Spec PDF (MapLarge's content, not for distribution)
+MapLarge Test Project -Developer - 2026.pdf

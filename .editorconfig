@@ -1,0 +1,36 @@
+root = true
+
+[*]
+indent_style = space
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.cs]
+indent_size = 4
+
+# Modern .NET idioms
+csharp_using_directive_placement = outside_namespace:warning
+csharp_style_namespace_declarations = file_scoped:warning
+csharp_prefer_simple_using_statement = true:suggestion
+csharp_style_expression_bodied_methods = when_on_single_line:silent
+csharp_style_expression_bodied_constructors = when_on_single_line:silent
+csharp_style_expression_bodied_properties = true:silent
+csharp_style_var_for_built_in_types = true:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+csharp_style_var_elsewhere = true:silent
+csharp_new_line_before_open_brace = all
+csharp_new_line_before_else = true
+csharp_new_line_before_catch = true
+csharp_new_line_before_finally = true
+dotnet_style_qualification_for_field = false:warning
+dotnet_style_qualification_for_property = false:warning
+dotnet_style_qualification_for_method = false:warning
+dotnet_style_qualification_for_event = false:warning
+
+[*.{csproj,xml}]
+indent_size = 2
+
+[*.{json,ts,js,html,css,md,yml,yaml}]
+indent_size = 2
