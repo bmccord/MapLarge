@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -24,6 +24,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3D5A434C-B61
 		MapLargeBrowser.Web\src\types.ts = MapLargeBrowser.Web\src\types.ts
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapLargeBrowser.Api.Tests", "MapLargeBrowser.Api.Tests\MapLargeBrowser.Api.Tests.csproj", "{60674474-0D83-4A54-BAF4-53A932181A05}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,18 @@ Global
 		{26BAD95D-D6D3-4F1C-BFCD-78197D4CDEED}.Release|x64.Build.0 = Release|Any CPU
 		{26BAD95D-D6D3-4F1C-BFCD-78197D4CDEED}.Release|x86.ActiveCfg = Release|Any CPU
 		{26BAD95D-D6D3-4F1C-BFCD-78197D4CDEED}.Release|x86.Build.0 = Release|Any CPU
+		{60674474-0D83-4A54-BAF4-53A932181A05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60674474-0D83-4A54-BAF4-53A932181A05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60674474-0D83-4A54-BAF4-53A932181A05}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{60674474-0D83-4A54-BAF4-53A932181A05}.Debug|x64.Build.0 = Debug|Any CPU
+		{60674474-0D83-4A54-BAF4-53A932181A05}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{60674474-0D83-4A54-BAF4-53A932181A05}.Debug|x86.Build.0 = Debug|Any CPU
+		{60674474-0D83-4A54-BAF4-53A932181A05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60674474-0D83-4A54-BAF4-53A932181A05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60674474-0D83-4A54-BAF4-53A932181A05}.Release|x64.ActiveCfg = Release|Any CPU
+		{60674474-0D83-4A54-BAF4-53A932181A05}.Release|x64.Build.0 = Release|Any CPU
+		{60674474-0D83-4A54-BAF4-53A932181A05}.Release|x86.ActiveCfg = Release|Any CPU
+		{60674474-0D83-4A54-BAF4-53A932181A05}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

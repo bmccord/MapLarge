@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http.Features;
 
 namespace MapLargeBrowser.Api;
 
-public static class Program
+public class Program
 {
     private const long MaxUploadBytes = 250L * 1024 * 1024;
     private const string DevCorsPolicy = "DevCors";
