@@ -4,3 +4,4 @@ import { startVideoPlayer } from './video';
 
 startBrowser();
 startVideoPlayer();
+
