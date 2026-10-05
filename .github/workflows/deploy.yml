@@ -175,8 +175,8 @@ jobs:
           WEB_IMAGE_TAG=${{ needs.version.outputs.web_version || 'latest' }}
           ENVEOF
 
-          $SSH "cd $DEPLOY_DIR && docker compose pull && docker compose up -d --remove-orphans"
-          $SSH "docker image prune -a --filter 'until=168h' -f" || true
+          $SSH "cd $DEPLOY_DIR && sudo docker compose pull && sudo docker compose up -d --remove-orphans"
+          $SSH "sudo docker image prune -a --filter 'until=168h' -f" || true
 
       - name: Clean up SSH
         if: always()
