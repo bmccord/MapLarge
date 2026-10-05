@@ -53,6 +53,8 @@ public class Program
             app.UseCors(DevCorsPolicy);
         }
 
+        app.MapGet("/health", () => Results.Text("ok"));
+
         app.MapControllers();
 
         app.Run();
