@@ -12,7 +12,7 @@ concurrency:
 jobs:
   changes:
     name: Detect Changes
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     outputs:
       api: ${{ steps.filter.outputs.api }}
       web: ${{ steps.filter.outputs.web }}
@@ -39,7 +39,7 @@ jobs:
     name: Build & Test API
     needs: changes
     if: needs.changes.outputs.api == 'true'
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
 
@@ -56,7 +56,7 @@ jobs:
     name: Build Web
     needs: changes
     if: needs.changes.outputs.web == 'true'
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: MapLargeBrowser.Web
